@@ -201,7 +201,7 @@ def print_menu(exits, room_items, inv_items):
     #
     # COMPLETE ME!
     #
-    
+
     print("What do you want to do?")
 
 
@@ -233,14 +233,34 @@ def execute_go(direction):
     pass
 
 
+def inventory_mass():
+    """This function returns the total mass of all the items in the player's
+    inventory
+
+    """
+    return sum([item["mass"] for item in inventory])
+
 def execute_take(item_id):
     """This function takes an item_id as an argument and moves this item from the
     list of items in the current room to the player's inventory. However, if
     there is no such item in the room, this function prints
     "You cannot take that."
     """
+    # Find the item in the list of items in the current room
+    for item in current_room["items"]:
+        if item["id"] == item_id:
+            # Check that taking this item will not put player over the weight
+            # limit
+            weight = inventory_mass() + item["mass"]
+            if weight > WEIGHT_LIMIT:
+                print("You can only carry " + str(WEIGHT_LIMIT) + "kg!")
+                return
+
+            # Do actual taking of item here
+            return
+
     pass
-    
+
 
 def execute_drop(item_id):
     """This function takes an item_id as an argument and moves this item from the
@@ -248,7 +268,7 @@ def execute_drop(item_id):
     no such item in the inventory, this function prints "You cannot drop that."
     """
     pass
-    
+
 
 def execute_command(command):
     """This function takes a command (a list of words as returned by
