@@ -3,7 +3,7 @@
 from map import rooms
 from player import *
 from items import *
-from parser import *
+from input import *
 
 
 
@@ -225,12 +225,23 @@ def is_valid_exit(exits, chosen_exit):
 
 
 def execute_go(direction):
-    """This function, given the direction (e.g. "south") updates the current room
+    """
+                        -=webMattson=-
+    This function, given the direction (e.g. "south") updates the current room
     to reflect the movement of the player if the direction is a valid exit
     (and prints the name of the room into which the player is
     moving). Otherwise, it prints "You cannot go there."
     """
-    pass
+    global current_room
+    
+    if direction not in current_room["exits"]:
+        print("You cannot go there.")
+    else:
+        print("execute go")
+        #print(move(current_room["exits"], direction))
+
+        exits = current_room["exits"]
+        current_room =  move(exits, direction)
 
 
 def inventory_mass():
@@ -241,10 +252,13 @@ def inventory_mass():
     return sum([item["mass"] for item in inventory])
 
 def execute_take(item_id):
-    """This function takes an item_id as an argument and moves this item from the
+    """
+                        -=webMattson=-
+    This function takes an item_id as an argument and moves this item from the
     list of items in the current room to the player's inventory. However, if
     there is no such item in the room, this function prints
     "You cannot take that."
+
     """
     # Find the item in the list of items in the current room
     for item in current_room["items"]:
@@ -256,18 +270,31 @@ def execute_take(item_id):
                 print("You can only carry " + str(WEIGHT_LIMIT) + "kg!")
                 return
 
-            # Do actual taking of item here
+            # 
+            current_room["items"].pop(item)
+            inventory.append(item)
             return
 
     pass
 
 
 def execute_drop(item_id):
-    """This function takes an item_id as an argument and moves this item from the
+    """
+                        -=webMattson=-
+    This function takes an item_id as an argument and moves this item from the
     player's inventory to list of items in the current room. However, if there is
     no such item in the inventory, this function prints "You cannot drop that."
     """
-    pass
+    
+    for item in inventory:
+        if item["id"] == item_id:
+            inventory.pop(index(item_id))
+            current_room["items"].append(item_id)
+            return
+
+    print("You cannot drop that.") # This communicat will only be displayed if item was not found.
+
+
 
 
 def execute_command(command):
