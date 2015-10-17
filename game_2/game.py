@@ -161,9 +161,22 @@ def print_exit(direction, leads_to):
     """
     print("GO " + direction.upper() + " to " + leads_to + ".")
 
+def hilite(string, status, bold):
+    attr = []
+    if status:
+        # green
+        attr.append('32')
+    else:
+        # red
+        attr.append('31')
+    if bold:
+        attr.append('1')
+    return '\x1b[%sm%s\x1b[0m' % (';'.join(attr), string)
 
 def print_menu(exits, room_items, inv_items):
-    """This function displays the menu of available actions to the player. The
+    """
+                        -=webMattson=-
+    This function displays the menu of available actions to the player. The
     argument exits is a dictionary of exits as exemplified in map.py. The
     arguments room_items and inv_items are the items lying around in the room
     and carried by the player respectively. The menu should, for each exit,
@@ -198,9 +211,13 @@ def print_menu(exits, room_items, inv_items):
         # Print the exit name and where it leads to
         print_exit(direction, exit_leads_to(exits, direction))
 
-    #
-    # COMPLETE ME!
-    #
+    # Iterate over room's items
+    for take_item in room_items:
+        print("TAKE " + take_item["id"] + " to take " + take_item["name"])
+
+    # Iterate over incentory items
+    for drop_item in inv_items:
+        print("DROP " + drop_item["id"] + " to drop " + drop_item["name"])
 
     print("What do you want to do?")
 
