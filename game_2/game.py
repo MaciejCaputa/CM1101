@@ -288,7 +288,7 @@ def execute_take(item_id):
                 return
 
             # 
-            current_room["items"].pop(item)
+            current_room["items"].remove(item)
             inventory.append(item)
             return
 
@@ -305,8 +305,8 @@ def execute_drop(item_id):
     
     for item in inventory:
         if item["id"] == item_id:
-            inventory.pop(index(item_id))
-            current_room["items"].append(item_id)
+            inventory.remove(item)
+            current_room["items"].append(item)
             return
 
     print("You cannot drop that.") # This communicat will only be displayed if item was not found.
