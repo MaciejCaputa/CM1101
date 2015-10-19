@@ -10,6 +10,17 @@ from map import locations
 from player import *
 from items import *
 from input import *
+from goals import *
+
+
+def higher_lower():
+    """
+    Higher or lower game when guessing the group's number
+    """
+    # GAME HERE
+    print("PLAYING THE HIGHER LOWER GAME HERE")
+    pass
+
 
 def list_of_items(items):
     """This function takes a list of items (see items.py for the definition) and
@@ -32,7 +43,7 @@ def list_of_items(items):
 
     for i, j in enumerate(items):
         string = string + j["name"]
-        if i != (len(items) -1):
+        if i != (len(items) - 1):
             string = string + ", "
     return string
 
@@ -74,7 +85,7 @@ def print_backpack_items(items):
     <BLANKLINE>
 
     """
-    
+
     print("You have " + list_of_items(items) + ".")
     print()
 
@@ -125,7 +136,6 @@ def print_room(location):
     print_room_items(location)
 
 
-
 def exit_leads_to(exits, direction):
     """This function takes a dictionary of exits and a direction (a particular
     exit taken from this dictionary). It returns the name of the room into which
@@ -155,6 +165,7 @@ def print_exit(direction, leads_to):
     GO SOUTH to Robs' room.
     """
     print("GO " + direction.upper() + " to " + leads_to + ".")
+
 
 def print_menu(exits, room_items, inv_items):
     """
@@ -224,6 +235,40 @@ def is_valid_exit(exits, chosen_exit):
     return chosen_exit in exits
 
 
+def print_goal(goal):
+    """
+    This function prints out a congratulations message upon completing a goal
+    """
+    dashes = "-" * (15 + len(goal["name"]))
+
+    print()
+    print(dashes)
+    print("ACHIEVED GOAL: " + goal["name"])
+    print(goal["text"])
+    print(dashes)
+
+
+def complete_goal(goal):
+    """
+    This function is called when a goal is completed. It prints out a message
+    and moves the player onto the next goal
+    """
+    global current_goal
+
+    # Print out a message
+    print_goal(goal)
+
+    # Move on to next goal
+    current_goal += 1
+
+    # Do something extra if required for this goal
+    if goal == goal_labs1:
+        # Play higher or lower after 1st lab goal
+        higher_lower()
+        # Complete higher lower
+        complete_goal(goal_pick_number)
+
+
 def execute_go(direction):
     """
     This function, given the direction (e.g. "south") updates the current room
@@ -232,10 +277,18 @@ def execute_go(direction):
     moving). Otherwise, it prints "You cannot go there."
     """
     global current_location
-    
-    if is_valid_exit(current_location["exits"],direction):
+    global current_goal
+
+    if is_valid_exit(current_location["exits"], direction):
         exits = current_location["exits"]
-        current_location =  move(exits, direction)
+        current_location = move(exits, direction)
+
+        # Check if player has completed a location-based goal
+        for goal in current_location["goals"]:
+            if goals.index(goal) == current_goal:
+                complete_goal(goal)
+                break
+
     else:
         print("You cannot go there.")
 
@@ -246,6 +299,23 @@ def backpack_mass():
     backpack
     """
     return sum([item["mass"] for item in backpack])
+
+
+def use_laptop():
+    """
+    The function 'uses' the laptop. The message printed out depends on what
+    goal the player is currently on
+    """
+    global current_goal
+
+    if current_goal < 1:
+        print("Not sure what to use laptop for...")
+    elif current_goal == 1:
+        print("Going on www.facebook.com")
+        complete_goal(goal_contact_george)
+    else:
+        print("Worked on the game for a bit")
+
 
 def execute_take(item_id):
     """
@@ -265,12 +335,10 @@ def execute_take(item_id):
                 print("You can only carry " + str(WEIGHT_LIMIT) + "kg!")
                 return
 
-            # 
+            #
             current_location["items"].remove(item)
             backpack.append(item)
             return
-
-    pass
 
 
 def execute_drop(item_id):
@@ -279,16 +347,31 @@ def execute_drop(item_id):
     player's backpack to list of items in the current room. However, if there is
     no such item in the backpack, this function prints "You cannot drop that."
     """
-    
+
     for item in backpack:
         if item["id"] == item_id:
             backpack.remove(item)
             current_location["items"].append(item)
             return
 
-    print("You cannot drop that.") # This communicat will only be displayed if item was not found.
+    print("You cannot drop that.")  # This message will only be displayed if item was not found.
 
 
+def execute_use(item_id):
+    """
+    This function uses an item
+    """
+
+    for item in backpack:
+        # Find the item in the backpack
+        if item["id"] == item_id:
+
+            # Currently only thing that can be used is laptop...
+            if item_id == "laptop":
+                use_laptop()
+                return
+
+    print("You cannot use that.")
 
 
 def execute_command(command):
@@ -315,6 +398,12 @@ def execute_command(command):
             execute_drop(command[1])
         else:
             print("Drop what?")
+
+    elif command[0] == "use":
+        if len(command) > 1:
+            execute_use(command[1])
+        else:
+            print("Use what?")
 
     else:
         print("This makes no sense.")
@@ -359,11 +448,18 @@ def move(exits, direction):
     return locations[exits[direction]]
 
 
+def end_game():
+    """
+    This function is called when the game ends
+    """
+    print("You've finished the game!")
+
+
 # This is the entry point of our program
 def main():
 
-    # Main game loop
-    while True:
+    # Main game loop - keep going whilst there are goals left
+    while current_goal < len(goals):
         # Display game status (room description, backpack etc.)
         print_room(current_location)
         print_backpack_items(backpack)
@@ -374,6 +470,8 @@ def main():
         # Execute the player's command
         execute_command(command)
 
+    # End game when leaving the while loop
+    end_game()
 
 
 # Are we being run as a script? If so, run main().
@@ -381,4 +479,3 @@ def main():
 # See https://docs.python.org/3.4/library/__main__.html for explanation
 if __name__ == "__main__":
     main()
-

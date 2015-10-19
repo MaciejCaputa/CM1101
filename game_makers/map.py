@@ -1,6 +1,7 @@
 # *** THIS FILE CONTAINS MAP OF ALL LOCATIONS ***
 
 from items import *
+from goals import *
 
 '''
 LOCATIONS:
@@ -62,9 +63,9 @@ location_lecture = {
     "name": "lecture theatre",
     "description":
     """Sarah's description""",
-    "exits":  {"north": "su", "east": "it", "south": "labs"},
+    "exits":  {"north": "accommodation", "east": "it", "south": "labs"},
     "items": [],
-    "goals": [1]
+    "goals": [goal_lecture]
 }
 
 location_labs = {
@@ -73,7 +74,7 @@ location_labs = {
     """Sarah's description""",
     "exits":  {"north": "lecture"},
     "items": [item_pen],
-    "goals": [3,7]
+    "goals": [goal_labs1, goal_labs2]
 }
 
 location_it = {
@@ -82,7 +83,7 @@ location_it = {
     """Sarah's description""",
     "exits":  {"south": "tutor", "west": "lecture"},
     "items": [],
-    "goals": []
+    "goals": [goal_it]
 }
 
 location_tutor = {
@@ -91,7 +92,7 @@ location_tutor = {
     """Sarah's description""",
     "exits":  {"north": "it"},
     "items": [],
-    "goals": [5,8]
+    "goals": [goal_tutor, goal_presentation]
 }
 
 # Combining all seperate locations together

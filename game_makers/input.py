@@ -89,4 +89,3 @@ def normalise_input(user_input):
     words = filter_words(words, skip_words)
 
     return words
-

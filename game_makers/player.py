@@ -8,14 +8,15 @@ WEIGHT_LIMIT = 5
 
 '''
 CONTENT OF BACKPACK:
-	-> student id
-	-> laptop
-	-> feta cheese
-	-> memory stick
+    -> student id
+    -> laptop
+    -> feta cheese
+    -> memory stick
  '''
-
 backpack = [item_id, item_laptop, item_cheese, item_memory_stick]
 
+# Goal that player is working on
+current_goal = 0
 
 # Start game at the student's accommodation
 current_location = locations["accommodation"]
