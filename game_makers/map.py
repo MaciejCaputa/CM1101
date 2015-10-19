@@ -23,6 +23,19 @@ GENERAL STRUCTURE OF LOCATION:
     -> goals        - list of consisting index of goals that need to be achieve in particular room
 '''
 
+ascii_map = """
+              STUDENT'S UNION
+                     |
+                     |
+    GYM ------ ACCOMMODATION ------ TOWN
+                     |
+                     |
+                LECTURE HALL ------ IT
+                     |              |
+                     |              |
+                   LABS        TUTOR'S OFFICE
+"""
+
 location_accommodation = {
     "name": "your accommodation",
     "description":

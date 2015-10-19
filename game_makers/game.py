@@ -6,7 +6,7 @@ MAJOR CHANGES:
     -> locations substitutes rooms
 '''
 
-from map import locations
+from map import locations, ascii_map
 from player import *
 from items import *
 from input import *
@@ -208,9 +208,13 @@ def print_menu(exits, room_items, inv_items):
     for take_item in room_items:
         print("TAKE " + take_item["id"] + " to take " + take_item["name"])
 
-    # Iterate over incentory items
+    # Iterate over inventory items
     for drop_item in inv_items:
         print("DROP " + drop_item["id"] + " to drop " + drop_item["name"])
+
+        # Show option to use item if required
+        if drop_item["id"] == "laptop" or drop_item["id"] == "map":
+            print("USE " + drop_item["id"] + " to use " + drop_item["name"])
 
     print("What do you want to do?")
 
@@ -366,9 +370,11 @@ def execute_use(item_id):
         # Find the item in the backpack
         if item["id"] == item_id:
 
-            # Currently only thing that can be used is laptop...
             if item_id == "laptop":
                 use_laptop()
+                return
+            elif item_id == "map":
+                print(ascii_map)
                 return
 
     print("You cannot use that.")
