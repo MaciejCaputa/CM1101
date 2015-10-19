@@ -3,9 +3,7 @@
 from map import rooms
 from player import *
 from items import *
-from parser import *
-
-
+from input import *
 
 def list_of_items(items):
     """This function takes a list of items (see items.py for the definition) and
@@ -25,14 +23,12 @@ def list_of_items(items):
 
     """
     string = ""
-    i = 1
-    while i < len(items):
-        string += items[item]["name"]
-        if i < len(items):#unless there are no others items we print ", ""
-            string += ", "
-        i += 1
 
-
+    for i, j in items.enumerate():
+        string = string + j["name"]
+        if i != (len(items) -1):
+            string = string + ", "
+    return string
 
 
 def print_room_items(room):
@@ -57,7 +53,8 @@ def print_room_items(room):
     Note: <BLANKLINE> here means that doctest should expect a blank line.
 
     """
-    pass
+    print("There is " + list_of_items(room["items"]) + ".")
+    print("")
 
 
 def print_inventory_items(items):
@@ -70,7 +67,8 @@ def print_inventory_items(items):
     <BLANKLINE>
 
     """
-    pass
+    
+    print("You have " + list_of_items(items) + ".")
 
 
 def print_room(room):
@@ -161,9 +159,22 @@ def print_exit(direction, leads_to):
     """
     print("GO " + direction.upper() + " to " + leads_to + ".")
 
+def hilite(string, status, bold):
+    attr = []
+    if status:
+        # green
+        attr.append('32')
+    else:
+        # red
+        attr.append('31')
+    if bold:
+        attr.append('1')
+    return '\x1b[%sm%s\x1b[0m' % (';'.join(attr), string)
 
 def print_menu(exits, room_items, inv_items):
-    """This function displays the menu of available actions to the player. The
+    """
+                        -=webMattson=-
+    This function displays the menu of available actions to the player. The
     argument exits is a dictionary of exits as exemplified in map.py. The
     arguments room_items and inv_items are the items lying around in the room
     and carried by the player respectively. The menu should, for each exit,
@@ -198,10 +209,14 @@ def print_menu(exits, room_items, inv_items):
         # Print the exit name and where it leads to
         print_exit(direction, exit_leads_to(exits, direction))
 
-    #
-    # COMPLETE ME!
-    #
-    
+    # Iterate over room's items
+    for take_item in room_items:
+        print("TAKE " + take_item["id"] + " to take " + take_item["name"])
+
+    # Iterate over incentory items
+    for drop_item in inv_items:
+        print("DROP " + drop_item["id"] + " to drop " + drop_item["name"])
+
     print("What do you want to do?")
 
 
@@ -225,30 +240,77 @@ def is_valid_exit(exits, chosen_exit):
 
 
 def execute_go(direction):
-    """This function, given the direction (e.g. "south") updates the current room
+    """
+                        -=webMattson=-
+    This function, given the direction (e.g. "south") updates the current room
     to reflect the movement of the player if the direction is a valid exit
     (and prints the name of the room into which the player is
     moving). Otherwise, it prints "You cannot go there."
     """
-    pass
+    global current_room
+    
+    if direction not in current_room["exits"]:
+        print("You cannot go there.")
+    else:
+        print("execute go")
+        #print(move(current_room["exits"], direction))
 
+        exits = current_room["exits"]
+        current_room =  move(exits, direction)
+
+
+def inventory_mass():
+    """This function returns the total mass of all the items in the player's
+    inventory
+
+    """
+    return sum([item["mass"] for item in inventory])
 
 def execute_take(item_id):
-    """This function takes an item_id as an argument and moves this item from the
+    """
+                        -=webMattson=-
+    This function takes an item_id as an argument and moves this item from the
     list of items in the current room to the player's inventory. However, if
     there is no such item in the room, this function prints
     "You cannot take that."
+
     """
+    # Find the item in the list of items in the current room
+    for item in current_room["items"]:
+        if item["id"] == item_id:
+            # Check that taking this item will not put player over the weight
+            # limit
+            weight = inventory_mass() + item["mass"]
+            if weight > WEIGHT_LIMIT:
+                print("You can only carry " + str(WEIGHT_LIMIT) + "kg!")
+                return
+
+            # 
+            current_room["items"].remove(item)
+            inventory.append(item)
+            return
+
     pass
-    
+
 
 def execute_drop(item_id):
-    """This function takes an item_id as an argument and moves this item from the
+    """
+                        -=webMattson=-
+    This function takes an item_id as an argument and moves this item from the
     player's inventory to list of items in the current room. However, if there is
     no such item in the inventory, this function prints "You cannot drop that."
     """
-    pass
     
+    for item in inventory:
+        if item["id"] == item_id:
+            inventory.remove(item)
+            current_room["items"].append(item)
+            return
+
+    print("You cannot drop that.") # This communicat will only be displayed if item was not found.
+
+
+
 
 def execute_command(command):
     """This function takes a command (a list of words as returned by

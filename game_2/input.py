@@ -27,13 +27,10 @@ def filter_words(words, skip_words):
     ['go', 'passage', 'south']
 
     """
-    #ommiting unnecessary words by means of list comprehension
-    #another way to do it is to record the indices of all elements you would like to delete and delete them after the iteration is done.
-    words[:] = [s for s in words if s not in skip_words]
+    # Ommiting unnecessary words by means of list comprehension
+    return [s for s in words if s not in skip_words]
 
-    return words
 
-    
 def remove_punct(text):
     """This function is used to remove all punctuation
     marks from a string. Spaces do not count as punctuation and should
@@ -46,8 +43,8 @@ def remove_punct(text):
     ' Hey  Yes'
     >>> remove_punct(",go!So.?uTh")
     'goSouTh'
+
     """
-    
     no_punct = ""
     for char in text:
         if not (char in string.punctuation):
@@ -83,11 +80,11 @@ def normalise_input(user_input):
     """
     # Remove punctuation and convert to lower case
     no_punct = remove_punct(user_input).lower()
-    no_punct = no_punct.strip().split()
-    no_punct = filter_words(no_punct, skip_words)
+    # Split string into words, removing whitespace
+    words = no_punct.split()
 
-    return no_punct
+    # Filter out words to skip
+    words = filter_words(words, skip_words)
 
-    #
-    # COMPLETE ME!
-    #
+    return words
+
