@@ -25,15 +25,12 @@ def list_of_items(items):
 
     """
     string = ""
-    i = 1
-    while i < len(items):
-        string += items[item]["name"]
-        if i < len(items):#unless there are no others items we print ", ""
-            string += ", "
-        i += 1
 
-
-
+    for i, j in items.enumerate():
+        string = string + j["name"]
+        if i != (len(items) -1):
+            string = string + ", "
+    return string
 
 def print_room_items(room):
     """This function takes a room as an input and nicely displays a list of items
@@ -57,7 +54,8 @@ def print_room_items(room):
     Note: <BLANKLINE> here means that doctest should expect a blank line.
 
     """
-    pass
+    print("There is " + list_of_items(room["items"]) + ".")
+    print("")
 
 
 def print_inventory_items(items):
@@ -70,7 +68,8 @@ def print_inventory_items(items):
     <BLANKLINE>
 
     """
-    pass
+    
+    print("You have " + list_of_items(items) + ".")
 
 
 def print_room(room):
