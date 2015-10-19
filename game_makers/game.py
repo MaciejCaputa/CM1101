@@ -438,7 +438,7 @@ def move(exits, direction):
 
     >>> move(locations["labs"]["exits"], "north") == locations["it"]
     False
-    >>> move(locations["lecture"]["exits"], "north") == locations["su"]
+    >>> move(locations["lecture"]["exits"], "north") == locations["accommodation"]
     True
     >>> move(locations["gym"]["exits"], "east") == locations["accommodation"]
     True
