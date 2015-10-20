@@ -11,6 +11,8 @@ from player import *
 from items import *
 from input import *
 from goals import *
+import time
+import sys
 
 
 def higher_lower():
@@ -89,6 +91,12 @@ def print_backpack_items(items):
     print("You have " + list_of_items(items) + ".")
     print()
 
+def print_slow(text, delay = 0.07):
+    for ch in text:
+        print(ch, end="")
+        sys.stdout.flush()
+        time.sleep(delay)
+
 
 def print_room(location):
     """This function takes a room as an input and nicely displays its name
@@ -128,10 +136,11 @@ def print_room(location):
     """
     # Display room name
     print()
-    print(location["name"].upper())
+    print_slow(location["name"].upper())
     print()
     # Display room description
-    print(location["description"])
+    print_slow(location["description"])
+    print()
     print()
     print_room_items(location)
 
@@ -380,6 +389,29 @@ def execute_use(item_id):
     print("You cannot use that.")
 
 
+def execute_help():
+    print('''
+    \t\tSupported commands:
+
+    MOVEMENT:
+      GO NORTH
+      GO EAST
+      GO SOUTH
+      GO WEST
+
+    TAKE, DROP, USE:
+      TAKE - shows all items in the room
+      TAKE [name of item] - takes specific item
+      DROP- shows all items in your backpack that you can drop
+      DROP [name of item] - drops specific item
+      USE - uses item
+      USE [name of item] - uses specific item
+
+    OTHER COMMANDS:
+      BACKPACK - shows content of you backpack
+      HELP - print all supported commands
+    ''')
+
 def execute_command(command):
     """This function takes a command (a list of words as returned by
     normalise_input) and, depending on the type of action (the first word of
@@ -410,6 +442,10 @@ def execute_command(command):
             execute_use(command[1])
         else:
             print("Use what?")
+    elif command[0] == "backpack":
+        print_backpack_items()
+    elif command[0] == "help":
+        execute_help()
 
     else:
         print("This makes no sense.")
