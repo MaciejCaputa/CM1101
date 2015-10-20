@@ -75,7 +75,7 @@ location_gym = {
 location_lecture = {
     "name": "lecture theatre",
     "description":
-    """You are standing in the lecture theature T\2.09. Most of the seats are already taken, but you can see Joe waving wildly at you from the far side of the room. You make your way over and take your seat with the rest of your team. The lights start flashing (the cinema mode gone mad) and Kirill does not look impressed.""",
+    """You are standing in the lecture theature T\\2.09. Most of the seats are already taken, but you can see Joe waving wildly at you from the far side of the room. You make your way over and take your seat with the rest of your team. The lights start flashing (the cinema mode gone mad) and Kirill does not look impressed.""",
     "exits":  {"north": "accommodation", "east": "it", "south": "labs"},
     "items": [],
     "goals": [goal_lecture]
