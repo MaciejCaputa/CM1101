@@ -1,10 +1,10 @@
 #!/usr/bin/python3
-'''
+"""
 MAJOR CHANGES:
     -> backpack substitutes inventory
     -> location substitutes room
     -> locations substitutes rooms
-'''
+"""
 
 from map import locations, ascii_map
 from player import *
@@ -86,7 +86,10 @@ def print_room_items(location):
     """
     if len(location["items"]) != 0:
         print("There is " + list_of_items(location["items"]) + " here.")
-        print()
+    else:
+        print("There are no items in this room.")
+    
+    print()
 
 
 def print_backpack_items(items):
@@ -155,6 +158,8 @@ def print_room(location):
     # Display room description
     print_slow(location["description"])
     print()
+    # Display exits
+    print_menu(location["exits"])
     print()
     # room's item are now printed on command LOOK AROUND
     # print_room_items(location)
@@ -191,7 +196,7 @@ def print_exit(direction, leads_to):
     print("GO " + direction.upper() + " to " + leads_to + ".")
 
 
-def print_menu(exits, room_items, inv_items):
+def print_menu(exits):
     """
     This function displays the menu of available actions to the player. The
     argument exits is a dictionary of exits as exemplified in map.py. The
@@ -407,15 +412,15 @@ def execute_help():
       GO WEST
 
     TAKE, DROP, USE:
-      TAKE - shows all items in the room
-      TAKE [name of item] - takes specific item
+      TAKE \t- shows all items in the room
+      TAKE [name of item] \t- takes specific item
       DROP - shows all items in your backpack that you can drop
-      DROP [name of item] - drops specific item
-      USE [name of item] - uses specific item
+      DROP [name of item] \t- drops specific item
+      USE [name of item] \t- uses specific item
 
     OTHER COMMANDS:
-      BACKPACK \t- shows content of your backpack
-      HELP \t- prints all supported commands
+      BACKPACK \t\t- shows content of your backpack
+      HELP \t\t- prints all supported commands
       LOOK AROUND \t- prints all items available in the room
 
     You can alway type HELP to print supported commands.
@@ -483,8 +488,7 @@ def menu(exits, room_items, inv_items):
 
     """
 
-    # Display menu
-    print_menu(exits, room_items, inv_items)
+
 
     # Read player's input
     user_input = input("> ")
@@ -520,15 +524,19 @@ def end_game():
     print("Well done, you have completed the game!")
 
 def game_makers():
-    # I will try to make a cool intro here. ~webMattson
+    """
+    This function prints title of the game.
+    """
     print("\n\n\n\n\t\t\t-=GAME MAKERS=-\n\n\n\n")
 
     print("Press enter to continue...")
     input()
 
+
+
 # This is the entry point of our program
 def main():
-
+    previous_location = ""
     game_makers()
 
     # Instructions for user at first
@@ -542,7 +550,8 @@ def main():
             complete_goal(goal_pick_number)
 
         # Display game status (room description)
-        print_room(current_location)
+        if previous_location != current_location:
+            print_room(current_location)
 
         # content of backpack is now printed only on command BACKPACK
         # print_backpack_items(backpack)
@@ -550,8 +559,12 @@ def main():
         # Show the menu with possible actions and ask the player
         command = menu(current_location["exits"], current_location["items"], backpack)
 
+        previous_location = current_location
+        
         # Execute the player's command
         execute_command(command)
+
+        
 
     # End game when leaving the while loop
     end_game()
