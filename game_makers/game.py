@@ -409,13 +409,12 @@ def execute_help():
     TAKE, DROP, USE:
       TAKE - shows all items in the room
       TAKE [name of item] - takes specific item
-      DROP- shows all items in your backpack that you can drop
+      DROP - shows all items in your backpack that you can drop
       DROP [name of item] - drops specific item
-      USE - uses item
       USE [name of item] - uses specific item
 
     OTHER COMMANDS:
-      BACKPACK \t- shows content of you backpack
+      BACKPACK \t- shows content of your backpack
       HELP \t- prints all supported commands
       LOOK AROUND \t- prints all items available in the room
 
@@ -432,6 +431,9 @@ def execute_command(command):
     execute_take, or execute_drop, supplying the second word as the argument.
 
     """
+    if len(command) == 0:
+        return
+
     if command[0] == "go":
         if len(command) > 1:
             execute_go(command[1])
@@ -459,12 +461,16 @@ def execute_command(command):
             execute_use(command[1])
         else:
             print("Use what?")
+
     elif command[0] == "backpack":
-        print_backpack_items()
+        print_backpack_items(backpack)
+
     elif command[0] == "help":
         execute_help()
-    elif (command[0] == "look") and (command[1] == "around"):
+
+    elif len(command) >= 2 and (command[0] == "look") and (command[1] == "around"):
         print_room_items(current_location)
+
     else:
         print("This makes no sense.")
 
