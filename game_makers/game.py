@@ -422,6 +422,9 @@ def execute_help():
       HELP - print all supported commands
     ''')
 
+    print("Press enter to continue...")
+    input()
+
 def execute_command(command):
     """This function takes a command (a list of words as returned by
     normalise_input) and, depending on the type of action (the first word of
@@ -439,13 +442,17 @@ def execute_command(command):
         if len(command) > 1:
             execute_take(command[1])
         else:
-            print("Take what?")
+            print("Take what? You can take:")
+            for item in current_location["items"]:
+                print("  -> " + item["name"])
 
     elif command[0] == "drop":
         if len(command) > 1:
             execute_drop(command[1])
         else:
-            print("Drop what?")
+            print("Drop what? You can drop:")
+            for item in backpack:
+                print("  -> " + item["name"])
 
     elif command[0] == "use":
         if len(command) > 1:
