@@ -3,7 +3,8 @@
 import string
 
 # List of "unimportant" words (feel free to add more)
-skip_words = ['a', 'about', 'all', 'an', 'another', 'any', 'around', 'at',
+#around is needed
+skip_words = ['a', 'about', 'all', 'an', 'another', 'any', """'around,'""" 'at',
               'bad', 'beautiful', 'been', 'better', 'big', 'can', 'every', 'for',
               'from', 'good', 'have', 'her', 'here', 'hers', 'his', 'how',
               'i', 'if', 'in', 'into', 'is', 'it', 'its', 'large', 'later',

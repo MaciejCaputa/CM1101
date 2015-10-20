@@ -61,6 +61,7 @@ def list_of_items(items):
     return string
 
 
+# this function is used on command LOOK AROUND
 def print_room_items(location):
     """This function takes a room as an input and nicely displays a list of items
     found in this room (followed by a blank line). If there are no items in
@@ -89,7 +90,8 @@ def print_room_items(location):
 
 
 def print_backpack_items(items):
-    """This function takes a list of backpack items and displays it nicely, in a
+    """
+    This function takes a list of backpack items and displays it nicely, in a
     manner similar to print_room_items(). The only difference is in formatting:
     print "You have ..." instead of "There is ... here.". For example:
 
@@ -102,7 +104,8 @@ def print_backpack_items(items):
     print("You have " + list_of_items(items) + ".")
     print()
 
-def print_slow(text, delay = 0.07):
+def print_slow(text, delay = 0.063):
+    "This function takes text and cause a delay in printing it."
     for ch in text:
         print(ch, end="")
         sys.stdout.flush()
@@ -153,7 +156,8 @@ def print_room(location):
     print_slow(location["description"])
     print()
     print()
-    print_room_items(location)
+    # room's item are now printed on command LOOK AROUND
+    # print_room_items(location)
 
 
 def exit_leads_to(exits, direction):
@@ -198,11 +202,6 @@ def print_menu(exits, room_items, inv_items):
     using the function exit_leads_to(). Then, it should print a list of commands
     related to items: for each item in the room print
 
-    "TAKE <ITEM ID> to take <item name>."
-
-    and for each item in the backpack print
-
-    "DROP <ITEM ID> to drop <item name>."
 
     For example, the menu of actions available at the Reception may look like this:
 
@@ -210,19 +209,17 @@ def print_menu(exits, room_items, inv_items):
     GO EAST to your personal tutor's office.
     GO WEST to the parking lot.
     GO SOUTH to Robs' room.
-    TAKE BISCUITS to take a pack of biscuits.
-    TAKE HANDBOOK to take a student handbook.
-    DROP ID to drop your id card.
-    DROP LAPTOP to drop your laptop.
-    DROP MONEY to drop your money.
     What do you want to do?
 
     """
-    print("You can:")
+    print("EXITS:")
     # Iterate over available exits
     for direction in exits:
         # Print the exit name and where it leads to
         print_exit(direction, exit_leads_to(exits, direction))
+
+    """
+    *** DROP AND TAKE ITEMS ARE ONLY DISPLAYD ON COMMANDS ***
 
     # Iterate over room's items
     for take_item in room_items:
@@ -235,7 +232,7 @@ def print_menu(exits, room_items, inv_items):
         # Show option to use item if required
         if drop_item["id"] == "laptop" or drop_item["id"] == "map":
             print("USE " + drop_item["id"] + " to use " + drop_item["name"])
-
+    """
     print("What do you want to do?")
 
 
@@ -418,8 +415,11 @@ def execute_help():
       USE [name of item] - uses specific item
 
     OTHER COMMANDS:
-      BACKPACK - shows content of you backpack
-      HELP - print all supported commands
+      BACKPACK \t- shows content of you backpack
+      HELP \t- prints all supported commands
+      LOOK AROUND \t- prints all items available in the room
+
+    You can alway type HELP to print supported commands.
     ''')
 
     print("Press enter to continue...")
@@ -463,10 +463,10 @@ def execute_command(command):
         print_backpack_items()
     elif command[0] == "help":
         execute_help()
-
+    elif (command[0] == "look") and (command[1] == "around"):
+        print_room_items(current_location)
     else:
         print("This makes no sense.")
-
 
 def menu(exits, room_items, inv_items):
     """This function, given a dictionary of possible exits from a room, and a list
@@ -513,10 +513,20 @@ def end_game():
     """
     print("Well done, you have completed the game!")
 
+def game_makers():
+    # I will try to make a cool intro here. ~webMattson
+    print("\n\n\n\n\t\t\t-=GAME MAKERS=-\n\n\n\n")
+
+    print("Press enter to continue...")
+    input()
 
 # This is the entry point of our program
 def main():
 
+    game_makers()
+
+    # Instructions for user at first
+    execute_help()
     # Main game loop - keep going whilst there are goals left
     while current_goal < len(goals):
 
@@ -525,9 +535,11 @@ def main():
             higher_lower()
             complete_goal(goal_pick_number)
 
-        # Display game status (room description, backpack etc.)
+        # Display game status (room description)
         print_room(current_location)
-        print_backpack_items(backpack)
+
+        # content of backpack is now printed only on command BACKPACK
+        # print_backpack_items(backpack)
 
         # Show the menu with possible actions and ask the player
         command = menu(current_location["exits"], current_location["items"], backpack)
