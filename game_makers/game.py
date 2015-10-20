@@ -19,9 +19,20 @@ def higher_lower():
     """
     Higher or lower game when guessing the group's number
     """
-    # GAME HERE
-    print("PLAYING THE HIGHER LOWER GAME HERE")
-    pass
+    while True:
+        user_input = input("Input your team number: ")
+        try:
+            user_input = int(user_input)
+
+            if user_input == 20:
+               print("Lucky guess")
+               break
+            elif user_input > 20:
+                print("Too high")
+            else:
+               print("Too low")
+        except:
+            print("Invalid input")
 
 
 def list_of_items(items):
@@ -252,11 +263,14 @@ def print_goal(goal):
     """
     This function prints out a congratulations message upon completing a goal
     """
-    dashes = "-" * (15 + len(goal["name"]))
+    global current_goal
+
+    progress = str(current_goal + 1) + "/" + str(len(goals))
+    dashes = "-" * (16 + len(progress) + len(goal["name"]))
 
     print()
     print(dashes)
-    print("ACHIEVED GOAL: " + goal["name"])
+    print("ACHIEVED GOAL " + progress + ": " + goal["name"])
     print(goal["text"])
     print(dashes)
 
@@ -274,12 +288,8 @@ def complete_goal(goal):
     # Move on to next goal
     current_goal += 1
 
-    # Do something extra if required for this goal
-    if goal == goal_labs1:
-        # Play higher or lower after 1st lab goal
-        higher_lower()
-        # Complete higher lower
-        complete_goal(goal_pick_number)
+    print("Press enter to continue...")
+    input()
 
 
 def execute_go(direction):
@@ -494,7 +504,7 @@ def end_game():
     """
     This function is called when the game ends
     """
-    print("You've finished the game!")
+    print("Well done, you have completed the game!")
 
 
 # This is the entry point of our program
@@ -502,6 +512,12 @@ def main():
 
     # Main game loop - keep going whilst there are goals left
     while current_goal < len(goals):
+
+        # Start higher or lower game straight away if on this goal
+        if goals[current_goal] == goal_pick_number:
+            higher_lower()
+            complete_goal(goal_pick_number)
+
         # Display game status (room description, backpack etc.)
         print_room(current_location)
         print_backpack_items(backpack)
