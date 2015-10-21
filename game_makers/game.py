@@ -376,6 +376,8 @@ def execute_take(item_id):
             backpack.append(item)
             return
 
+    print("You cannot take that.")
+
 
 def execute_drop(item_id):
     """
@@ -505,9 +507,6 @@ def menu(exits, room_items, inv_items):
     function before being returned.
 
     """
-
-
-
     # Read player's input
     user_input = input("> ")
 
@@ -572,9 +571,6 @@ def main():
         # Display game status (room description)
         if previous_location != current_location:
             print_room(current_location)
-
-        # content of backpack is now printed only on command BACKPACK
-        # print_backpack_items(backpack)
 
         # Show the menu with possible actions and ask the player
         command = menu(current_location["exits"], current_location["items"], backpack)
