@@ -45,7 +45,7 @@ item_notebook = {
 }
 
 item_memory_stick = {
-    "id": "memory_stick",
+    "id": "stick",
 
     "name": "memory stick",
 

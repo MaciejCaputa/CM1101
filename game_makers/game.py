@@ -288,12 +288,18 @@ def complete_goal(goal):
     and moves the player onto the next goal
     """
     global current_goal
+    global previous_location
 
     # Print out a message
     print_goal(goal)
 
     # Move on to next goal
     current_goal += 1
+
+    # Reset previous_location if player has just completed contact george goal
+    # so that the room information is shown again
+    if goal == goal_contact_george:
+        previous_location = ""
 
     print("Press enter to continue...")
     input()
@@ -454,17 +460,24 @@ def execute_command(command):
         if len(command) > 1:
             execute_take(command[1])
         else:
-            print("Take what? You can take:")
-            for item in current_location["items"]:
-                print("  -> " + item["name"])
+            if len(current_location["items"]) > 0:
+                print("Take what? You can type:")
+
+                for item in current_location["items"]:
+                    print("  TAKE " + item["id"] + " to take " + item["name"])
+            else:
+                print("There is nothing to take")
 
     elif command[0] == "drop":
         if len(command) > 1:
             execute_drop(command[1])
         else:
-            print("Drop what? You can drop:")
-            for item in backpack:
-                print("  -> " + item["name"])
+            if len(backpack) > 0:
+                print("Drop what? You can type:")
+                for item in backpack:
+                    print("  DROP " + item["id"] + " to drop " + item["name"])
+            else:
+                print("You have nothing to drop")
 
     elif command[0] == "use":
         if len(command) > 1:
@@ -538,10 +551,12 @@ def game_makers():
     input()
 
 
+previous_location = ""
 
 # This is the entry point of our program
 def main():
-    previous_location = ""
+    global previous_location
+
     game_makers()
 
     # Instructions for user at first
@@ -568,7 +583,6 @@ def main():
 
         # Execute the player's command
         execute_command(command)
-
 
 
     # End game when leaving the while loop
