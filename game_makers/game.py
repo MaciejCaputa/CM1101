@@ -6,6 +6,8 @@ MAJOR CHANGES:
     -> locations substitutes rooms
 """
 
+import msvcrt
+
 from map import locations, ascii_map
 from player import *
 from items import *
@@ -88,7 +90,7 @@ def print_room_items(location):
         print("There is " + list_of_items(location["items"]) + " here.")
     else:
         print("There are no items in this room.")
-    
+
     print()
 
 
@@ -113,6 +115,9 @@ def print_slow(text, delay = 0.063):
         print(ch, end="")
         sys.stdout.flush()
         time.sleep(delay)
+
+        if msvcrt.kbhit():
+            delay = 0
 
 
 def print_room(location):
@@ -412,11 +417,11 @@ def execute_help():
       GO WEST
 
     TAKE, DROP, USE:
-      TAKE \t- shows all items in the room
-      TAKE [name of item] \t- takes specific item
-      DROP - shows all items in your backpack that you can drop
-      DROP [name of item] \t- drops specific item
-      USE [name of item] \t- uses specific item
+      TAKE                - shows all items in the room
+      TAKE [name of item] - takes specific item
+      DROP                - shows all items in your backpack that you can drop
+      DROP [name of item] - drops specific item
+      USE [name of item]  - uses specific item
 
     OTHER COMMANDS:
       BACKPACK \t\t- shows content of your backpack
@@ -560,11 +565,11 @@ def main():
         command = menu(current_location["exits"], current_location["items"], backpack)
 
         previous_location = current_location
-        
+
         # Execute the player's command
         execute_command(command)
 
-        
+
 
     # End game when leaving the while loop
     end_game()
