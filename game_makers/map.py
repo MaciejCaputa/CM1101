@@ -75,7 +75,7 @@ location_gym = {
 location_lecture = {
     "name": "lecture theatre",
     "description":
-    """You are standing in the lecture theature T\\2.09. Most of the seats are already taken, but you can see Joe waving wildly at you from the far side of the room. You make your way over and take your seat with the rest of your team. The lights start flashing (the cinema mode gone mad) and Kirill does not look impressed.""",
+    """The lights start flashing (the cinema mode gone mad) and Kirill does not look impressed.""",
     "exits":  {"north": "accommodation", "east": "it", "south": "labs"},
     "items": [],
     "goals": [goal_lecture]
@@ -84,7 +84,7 @@ location_lecture = {
 location_labs = {
     "name": "labs",
     "description":
-    """You scan your ID card and enter the labs, making sure to sign in.""",
+    """There are lots of people staring at computer screens. They must be working on their games.""",
     "exits":  {"north": "lecture"},
     "items": [item_pen],
     "goals": [goal_labs1, goal_labs2]
@@ -93,7 +93,7 @@ location_labs = {
 location_it = {
     "name": "IT room",
     "description":
-    """You walk inside the IT room. The maintenance staff look up at you questioningly.""",
+    """The maintenance staff look up at you questioningly.""",
     "exits":  {"south": "tutor", "west": "lecture"},
     "items": [],
     "goals": [goal_it]
@@ -102,7 +102,7 @@ location_it = {
 location_tutor = {
     "name": "tutor's room",
     "description":
-    """You enter your tutor's room. There are lots of cacti growing on the windowsill.""",
+    """There are lots of cacti growing on the windowsill.""",
     "exits":  {"north": "it"},
     "items": [],
     "goals": [goal_tutor, goal_presentation]
