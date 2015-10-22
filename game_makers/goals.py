@@ -40,11 +40,11 @@ goal_pick_number = {
     "name": "Pick group number",
     "text": """
 They approve your number. They explain that they have an obssession with the
-number 20, as it is the number of vertices a Dodecahedron has, how bizarre!!
+number 20, as it is the number of vertices a dodecahedron has, how bizarre!!
 
-All of a sudden the wi-fi goes down, your group panics, and Maciej worsens the
-situation by telling your group he's going back to Poland on wednesday. You
-need to ask your tutor for to do the presentation early."""
+All of a sudden the Wi-fi goes down, your group panics, and Maciej worsens the
+situation by telling your group he's going back to Poland on Wednesday. You
+need to ask your tutor to do the presentation early."""
 }
 
 goal_tutor = {

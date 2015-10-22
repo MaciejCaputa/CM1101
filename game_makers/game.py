@@ -436,7 +436,7 @@ def execute_help():
       HELP \t\t- prints all supported commands
       LOOK AROUND \t- prints all items available in the room
 
-    You can alway type HELP to print supported commands.
+    You can always type HELP to print supported commands.
     ''')
 
     print("Press enter to continue...")
